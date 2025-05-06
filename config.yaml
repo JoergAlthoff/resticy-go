@@ -1,0 +1,156 @@
+backup_log: /var/log/restic_full.log
+forget_log: /var/log/restic_forget.log
+snapshots_log: /var/log/restic_snapshots.log
+status_log: /var/log/restic_status.log
+
+
+restic_global:
+  # Zugang zum Repository
+  repository: /mnt/restic/restic-beelink1
+  repository_file: ""
+  password_file: /etc/restic/.restic_password
+  password_command: ""
+  key_hint: ""
+  tls_client_cert: ""
+  cacert: ""
+
+  # Caching & Performance
+  cache_dir: ""
+  cleanup_cache: false
+  no_cache: false
+  no_extra_verify: false
+  no_lock: false
+  retry_lock: ""
+  limit_download: 0
+  limit_upload: 0
+  pack_size: 0
+  compression: auto
+  option: []
+
+  # Sicherheit & Verhalten
+  insecure_tls: false
+  quiet: false
+  json: false
+  verbose: 0
+
+
+snapshots:
+  # Filter options
+  host: []
+  path: []
+  tag: []
+
+  # Display behavior
+  compact: false
+  group-by: ""
+  latest: 0
+
+
+forget:
+  # Snapshot retention policies
+  keep-last: 0
+  keep-hourly: 0
+  keep-daily: 14
+  keep-weekly: 4
+  keep-monthly: 6
+  keep-yearly: 0
+
+  # Time-based retention (relative to latest)
+  keep-within: ""
+  keep-within-hourly: ""
+  keep-within-daily: ""
+  keep-within-weekly: ""
+  keep-within-monthly: ""
+  keep-within-yearly: ""
+
+  # Cleanup behavior
+  prune: true
+
+
+backup:
+  # Data sources (what to back up)
+  files-from: ""
+  files-from-raw: ""
+  files-from-verbatim: []
+  stdin: ""
+  stdin-filename: ""
+
+  # Exclusions (what to skip)
+  exclude:
+    - /home/joerg/.cache
+    - /home/joerg/.local/share/Trash
+    - /home/joerg/.thumbnails
+    - /home/joerg/.docker
+    - /home/timeshift
+    - /proc
+    - /tmp
+    - /timeshift
+    - /sys
+    - /run
+    - /mnt
+    - /media
+    - /var/tmp
+    - /var/cache
+    - /swapfile
+    - /var/lib/docker
+  exclude-file: []
+  exclude-if-present: []
+  exclude-larger-than: ""
+  exclude-caches: false
+  iexclude: []
+  iexclude-file: []
+
+  # Backup behavior and scanning
+  dry-run: false
+  force: false
+  ignore-ctime: false
+  ignore-inode: false
+  no-scan: false
+  one-file-system: false
+  with-atime: false
+  read-concurrency: 0
+
+  # Snapshot metadata and control
+  host: ""
+  tag: []
+  group-by: ""
+  parent: ""
+  time: ""
+  help: false
+
+prune:
+  max_unused: "5%"
+  max_repack_size: ""
+  repack_cacheable_only: false
+  repack_small: false
+  repack_uncompressed: false
+  dry_run: false
+
+
+check:
+  read_data: false
+  check_unused: false
+  with_cache: true
+  
+
+diff:
+  # Placeholder for restic diff options
+  # Not yet implemented in resticy-go
+
+  from: ""     # first snapshot ID
+  to: ""       # second snapshot ID
+  metadata: false
+  help: false
+
+# Placeholder section for future restic init support
+init:
+  # Placeholder for restic init options
+  # Not yet implemented in resticy-go
+
+  copy_chunker_params: false
+  from_repo: ""
+  from_repository_file: ""
+  from_password_file: ""
+  from_password_command: ""
+  from_key_hint: ""
+  repository_version: "stable"
