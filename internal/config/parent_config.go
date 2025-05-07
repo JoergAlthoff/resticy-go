@@ -7,22 +7,22 @@ import (
 
 type ParentConfig struct {
 	Repository      string   `yaml:"repository,omitempty"`
-	RepositoryFile  string   `yaml:"repository-file,omitempty"`
-	PasswordFile    string   `yaml:"password-file,omitempty"`
-	PasswordCommand string   `yaml:"password-command,omitempty"`
-	KeyHint         string   `yaml:"key-hint,omitempty"`
+	RepositoryFile  string   `yaml:"repository_file,omitempty"`
+	PasswordFile    string   `yaml:"password_file,omitempty"`
+	PasswordCommand string   `yaml:"password_command,omitempty"`
+	KeyHint         string   `yaml:"key_hint,omitempty"`
 	CacheDir        string   `yaml:"cache_dir,omitempty"`
 	CleanupCache    bool     `yaml:"cleanup_cache,omitempty"`
-	NoCache         bool     `yaml:"no-cache,omitempty"`
+	NoCache         bool     `yaml:"no_cache,omitempty"`
 	CACert          string   `yaml:"cacert,omitempty"`
 	InsecureTLS     bool     `yaml:"insecure_tls,omitempty"`
 	Compression     string   `yaml:"compression,omitempty"`
-	PackSize        int      `yaml:"pack-size,omitempty"`
-	NoLock          bool     `yaml:"no-lock,omitempty"`
-	RetryLock       string   `yaml:"retry-lock,omitempty"`
-	TLSClientCert   string   `yaml:"tls-client-cert,omitempty"`
-	LimitDownload   int      `yaml:"limit-download,omitempty"`
-	LimitUpload     int      `yaml:"limit-upload,omitempty"`
+	PackSize        int      `yaml:"pack_size,omitempty"`
+	NoLock          bool     `yaml:"no_lock,omitempty"`
+	RetryLock       string   `yaml:"retry_lock,omitempty"`
+	TLSClientCert   string   `yaml:"tls_client_cert,omitempty"`
+	LimitDownload   int      `yaml:"limit_download,omitempty"`
+	LimitUpload     int      `yaml:"limit_upload,omitempty"`
 	NoExtraVerify   bool     `yaml:"no_extra_verify,omitempty"`
 	Option          []string `yaml:"option,omitempty"`
 	JSON            bool     `yaml:"json,omitempty"`

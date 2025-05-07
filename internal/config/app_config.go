@@ -10,12 +10,13 @@ import (
 type AppConfig struct {
 	Backup       BackupConfig `yaml:"backup,omitempty"`
 	Forget       ForgetConfig `yaml:"forget,omitempty"`
-	Parent       ParentConfig `yaml:"global,omitempty"`
+	Parent       ParentConfig `yaml:"parent,omitempty"`
 	Check        CheckConfig  `yaml:"check,omitempty"`
 	BackupLog    string       `yaml:"backup_log"`
 	ForgetLog    string       `yaml:"forget_log,omitempty"`
 	SnapshotsLog string       `yaml:"snapshots_log,omitempty"`
 	StatusLog    string       `yaml:"status_log,omitempty"`
+	Debug        bool         `yaml:"debug,omitempty"`
 }
 
 func Load(path string) (*AppConfig, error) {

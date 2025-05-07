@@ -4,7 +4,7 @@ snapshots_log: /var/log/restic_snapshots.log
 status_log: /var/log/restic_status.log
 
 
-restic_global:
+parent:
   # Zugang zum Repository
   repository: /mnt/restic/restic-beelink1
   repository_file: ""

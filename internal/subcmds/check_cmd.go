@@ -2,8 +2,6 @@ package subcmds
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 	"resticy-go/internal/config"
 )
 
@@ -18,19 +16,14 @@ func NewCheck(cfg *config.AppConfig) *Check {
 
 func (c *Check) Execute() error {
 	c.buildArgs()
-
-	cmd := exec.Command("restic", c.args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	if c.cfg.Parent.Verbose > 0 {
-		fmt.Printf("Executing: restic %v\n", c.args)
-	}
-
-	return cmd.Run()
+	return runRestic(c.args, c.cfg.Parent.Verbose)
 }
 
 func (c *Check) buildArgs() {
+	if c.cfg.Debug {
+		fmt.Printf("cfg.Parent content: %+v\n", c.cfg.Parent)
+	}
+
 	c.args = []string{"check"}
 
 	if c.cfg.Parent.RepositoryFile != "" {
@@ -55,5 +48,9 @@ func (c *Check) buildArgs() {
 
 	if c.cfg.Parent.Verbose > 0 {
 		c.args = append(c.args, fmt.Sprintf("--verbose=%d", c.cfg.Parent.Verbose))
+	}
+
+	if c.cfg.Debug {
+		fmt.Printf("Built arguments: %v\n", c.args)
 	}
 }

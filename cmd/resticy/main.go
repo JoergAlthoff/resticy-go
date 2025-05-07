@@ -33,6 +33,7 @@ func main() {
 	if *flagDebug {
 		fmt.Fprintln(os.Stderr, "Debug mode active")
 	}
+	cfg.Debug = *flagDebug
 
 	// Validate configuration based on specific subcommand requirements
 	if err := validateConfigForCommand(command, cfg); err != nil {
