@@ -31,7 +31,7 @@ func Load(path string) (*AppConfig, error) {
 	return &cfg, nil
 }
 
-func ApplyDefaults(cfg *AppConfig) {
+func (cfg *AppConfig) ApplyDefaults() {
 	cfg.Parent.ApplyDefaults()
 
 	if cfg.BackupLog == "" {
@@ -52,3 +52,21 @@ func ApplyDefaults(cfg *AppConfig) {
 		os.Exit(1)
 	}
 }
+
+func (cfg *AppConfig) Validate() error {
+	if err := cfg.Backup.Validate(); err != nil {
+		return fmt.Errorf("invalid backup config: %w", err)
+	}
+	if err := cfg.Forget.Validate(); err != nil {
+		return fmt.Errorf("invalid forget config: %w", err)
+	}
+	if err := cfg.Check.Validate(); err != nil {
+		return fmt.Errorf("invalid check config: %w", err)
+	}
+	if err := cfg.Parent.Validate(); err != nil {
+		return fmt.Errorf("invalid parent config: %w", err)
+	}
+	return nil
+}
+
+var _ ConfigSection = (*AppConfig)(nil)

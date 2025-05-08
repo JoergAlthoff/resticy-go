@@ -81,3 +81,4 @@ Temporary Items
 
 # Excludes the project binary
 resticy
+*.man

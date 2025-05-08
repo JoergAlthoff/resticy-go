@@ -29,7 +29,7 @@ func (b *Backup) buildArgs() {
 		b.args = append(b.args, "--password-file", b.cfg.Parent.PasswordFile)
 	}
 
-	b.args = append(b.args, b.cfg.BuildExcludeFlags()...)
+	b.args = append(b.args, b.cfg.Backup.BuildFlags()...)
 
 	if b.cfg.Debug {
 		fmt.Printf("Built arguments: %v\n", b.args)

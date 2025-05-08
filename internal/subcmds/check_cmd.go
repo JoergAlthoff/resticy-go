@@ -50,6 +50,8 @@ func (c *Check) buildArgs() {
 		c.args = append(c.args, fmt.Sprintf("--verbose=%d", c.cfg.Parent.Verbose))
 	}
 
+	c.args = append(c.args, c.cfg.Check.BuildFlags()...)
+
 	if c.cfg.Debug {
 		fmt.Printf("Built arguments: %v\n", c.args)
 	}
