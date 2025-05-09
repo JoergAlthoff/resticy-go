@@ -31,49 +31,49 @@ type BackupConfig struct {
 	Help                bool     `yaml:"help,omitempty"`
 }
 
-func (c *BackupConfig) BuildFlags() []string {
+func (backupConfig *BackupConfig) BuildFlags() []string {
 	var flags []string
 
-	for _, val := range c.Exclude {
+	for _, val := range backupConfig.Exclude {
 		flags = append(flags, "--exclude="+val)
 	}
-	for _, val := range c.ExcludeFile {
+	for _, val := range backupConfig.ExcludeFile {
 		flags = append(flags, "--exclude-file="+val)
 	}
-	for _, val := range c.ExcludeIfPresent {
+	for _, val := range backupConfig.ExcludeIfPresent {
 		flags = append(flags, "--exclude-if-present="+val)
 	}
-	for _, val := range c.IExclude {
+	for _, val := range backupConfig.IExclude {
 		flags = append(flags, "--iexclude="+val)
 	}
-	for _, val := range c.IExcludeFile {
+	for _, val := range backupConfig.IExcludeFile {
 		flags = append(flags, "--iexclude-file="+val)
 	}
-	for _, val := range c.FilesFromVerbatim {
+	for _, val := range backupConfig.FilesFromVerbatim {
 		flags = append(flags, "--files-from-verbatim="+val)
 	}
-	for _, val := range c.Tag {
+	for _, val := range backupConfig.Tag {
 		flags = append(flags, "--tag="+val)
 	}
 
 	return flags
 }
 
-func (c *BackupConfig) ApplyDefaults() {
+func (backupConfig *BackupConfig) ApplyDefaults() {
 	// Beispiel für einen sinnvollen Standardwert
-	if c.ExcludeLargerThan == "" {
-		c.ExcludeLargerThan = "5G"
+	if backupConfig.ExcludeLargerThan == "" {
+		backupConfig.ExcludeLargerThan = "5G"
 	}
 
 	// Standardwerte für booleans, falls benötigt
 	// (nicht zwingend erforderlich, da bools in Go defaultmäßig false sind)
 }
 
-func (c *BackupConfig) Validate() error {
-	if c.ReadConcurrency < 0 {
+func (backupConfig *BackupConfig) Validate() error {
+	if backupConfig.ReadConcurrency < 0 {
 		return fmt.Errorf("read-concurrency must not be negative")
 	}
-	if c.ExcludeLargerThan != "" && c.ExcludeLargerThan[0] == '-' {
+	if backupConfig.ExcludeLargerThan != "" && backupConfig.ExcludeLargerThan[0] == '-' {
 		return fmt.Errorf("exclude-larger-than must not be negative")
 	}
 	// Weitere Regeln können bei Bedarf ergänzt werden

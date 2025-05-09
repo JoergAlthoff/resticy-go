@@ -4,4 +4,5 @@ package config
 type ConfigSection interface {
 	ApplyDefaults()
 	Validate() error
+	BuildFlags() []string
 }

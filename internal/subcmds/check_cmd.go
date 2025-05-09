@@ -2,57 +2,39 @@ package subcmds
 
 import (
 	"fmt"
-	"resticy-go/internal/config"
+	"github.com/JoergAlthoff/resticy-go/internal/config"
+	"github.com/JoergAlthoff/resticy-go/internal/logging"
 )
 
-type Check struct {
-	cfg  *config.AppConfig
-	args []string
+type CheckCommand struct {
+	appConfig *config.AppConfig
+	args      []string
 }
 
-func NewCheck(cfg *config.AppConfig) *Check {
-	return &Check{cfg: cfg}
+func NewCheck(appConfig *config.AppConfig) *CheckCommand {
+	return &CheckCommand{appConfig: appConfig}
 }
 
-func (c *Check) Execute() error {
-	c.buildArgs()
-	return runRestic(c.args, c.cfg.Parent.Verbose)
+func (command *CheckCommand) Execute() error {
+	command.buildArgs()
+	output, err := runRestic(command.args, command.appConfig.Debug)
+	if err != nil {
+		return err
+	}
+	return logging.LogCommandOutput(command.appConfig.ForgetLog, output)
 }
 
-func (c *Check) buildArgs() {
-	if c.cfg.Debug {
-		fmt.Printf("cfg.Parent content: %+v\n", c.cfg.Parent)
+func (command *CheckCommand) buildArgs() {
+	if command.appConfig.Debug {
+		fmt.Printf("cfg.Parent content: %+v\n", command.appConfig.Parent)
 	}
 
-	c.args = []string{"check"}
+	command.args = append([]string{"check"}, command.appConfig.Parent.BuildFlags()...)
+	command.args = append(command.args, command.appConfig.Check.BuildFlags()...)
 
-	if c.cfg.Parent.RepositoryFile != "" {
-		c.args = append(c.args, "--repository-file", c.cfg.Parent.RepositoryFile)
-	} else if c.cfg.Parent.Repository != "" {
-		c.args = append(c.args, "--repo", c.cfg.Parent.Repository)
-	}
-
-	if c.cfg.Parent.PasswordCommand != "" {
-		c.args = append(c.args, "--password-command", c.cfg.Parent.PasswordCommand)
-	} else if c.cfg.Parent.PasswordFile != "" {
-		c.args = append(c.args, "--password-file", c.cfg.Parent.PasswordFile)
-	}
-
-	if c.cfg.Parent.CACert != "" {
-		c.args = append(c.args, "--cacert", c.cfg.Parent.CACert)
-	}
-
-	if c.cfg.Parent.Quiet {
-		c.args = append(c.args, "--quiet")
-	}
-
-	if c.cfg.Parent.Verbose > 0 {
-		c.args = append(c.args, fmt.Sprintf("--verbose=%d", c.cfg.Parent.Verbose))
-	}
-
-	c.args = append(c.args, c.cfg.Check.BuildFlags()...)
-
-	if c.cfg.Debug {
-		fmt.Printf("Built arguments: %v\n", c.args)
+	if command.appConfig.Debug {
+		fmt.Printf("Built arguments: %v\n", command.args)
 	}
 }
+
+var _ SubCommand = (*CheckCommand)(nil)

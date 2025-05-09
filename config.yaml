@@ -164,3 +164,8 @@ init:
   from_password_command: ""
   from_key_hint: ""
   repository_version: "stable"
+
+list:
+  # List object type in the repository
+  # Valid types are: blobs, packs, index, snapshots, keys, locks
+  type: locks

@@ -17,6 +17,7 @@ func (c *CheckConfig) ApplyDefaults() {
 func (c *CheckConfig) Validate() error {
 	return nil
 }
+
 func (c *CheckConfig) BuildFlags() []string {
 	var flags []string
 

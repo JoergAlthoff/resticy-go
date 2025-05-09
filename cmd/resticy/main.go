@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"resticy-go/internal/config"
-	"resticy-go/internal/subcmds"
+	"github.com/JoergAlthoff/resticy-go/internal/config"
+	"github.com/JoergAlthoff/resticy-go/internal/subcmds"
 )
 
 var (
@@ -39,6 +39,46 @@ func init() {
 		Short: "Run restic check",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return subcmds.NewCheck(cfg).Execute()
+		},
+	})
+
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "backup",
+		Short: "Run restic backup",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return subcmds.NewBackup(cfg, args).Execute()
+		},
+	})
+
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "forget",
+		Short: "Run restic forget",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return subcmds.NewForgetCommand(cfg).Execute()
+		},
+	})
+
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "status",
+		Short: "Show repository status including snapshots, stats and locks",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return subcmds.NewStatusCommand(cfg).Execute()
+		},
+	})
+
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "stats",
+		Short: "Show repository statistics",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return subcmds.NewStatsCommand(cfg).Execute()
+		},
+	})
+
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "snapshots",
+		Short: "List snapshots in the repository",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return subcmds.NewSnapshotsCommand(cfg).Execute()
 		},
 	})
 }

@@ -8,15 +8,19 @@ import (
 )
 
 type AppConfig struct {
-	Backup       BackupConfig `yaml:"backup,omitempty"`
-	Forget       ForgetConfig `yaml:"forget,omitempty"`
-	Parent       ParentConfig `yaml:"parent,omitempty"`
-	Check        CheckConfig  `yaml:"check,omitempty"`
-	BackupLog    string       `yaml:"backup_log"`
-	ForgetLog    string       `yaml:"forget_log,omitempty"`
-	SnapshotsLog string       `yaml:"snapshots_log,omitempty"`
-	StatusLog    string       `yaml:"status_log,omitempty"`
-	Debug        bool         `yaml:"debug,omitempty"`
+	Backup       BackupConfig    `yaml:"backup,omitempty"`
+	Forget       ForgetConfig    `yaml:"forget,omitempty"`
+	Parent       ParentConfig    `yaml:"parent,omitempty"`
+	Check        CheckConfig     `yaml:"check,omitempty"`
+	Stats        StatsConfig     `yaml:"stats,omitempty"`
+	Snapshots    SnapshotsConfig `yaml:"snapshots,omitempty"`
+	List         ListConfig      `yaml:"list,omitempty"`
+	BackupLog    string          `yaml:"backup_log"`
+	ForgetLog    string          `yaml:"forget_log,omitempty"`
+	SnapshotsLog string          `yaml:"snapshots_log,omitempty"`
+	StatusLog    string          `yaml:"status_log,omitempty"`
+	StatsLog     string          `yaml:"stats_log,omitempty"`
+	Debug        bool            `yaml:"debug,omitempty"`
 }
 
 func Load(path string) (*AppConfig, error) {
@@ -33,6 +37,12 @@ func Load(path string) (*AppConfig, error) {
 
 func (cfg *AppConfig) ApplyDefaults() {
 	cfg.Parent.ApplyDefaults()
+	cfg.Stats.ApplyDefaults()
+	cfg.Snapshots.ApplyDefaults()
+	cfg.List.ApplyDefaults()
+	cfg.Backup.ApplyDefaults()
+	cfg.Forget.ApplyDefaults()
+	cfg.Check.ApplyDefaults()
 
 	if cfg.BackupLog == "" {
 		cfg.BackupLog = "/var/log/restic_backup.log"
@@ -45,6 +55,9 @@ func (cfg *AppConfig) ApplyDefaults() {
 	}
 	if cfg.StatusLog == "" {
 		cfg.StatusLog = "/var/log/restic_status.log"
+	}
+	if cfg.StatsLog == "" {
+		cfg.StatsLog = "/var/log/restic_stats.log"
 	}
 
 	if err := cfg.Parent.Validate(); err != nil {
@@ -66,6 +79,22 @@ func (cfg *AppConfig) Validate() error {
 	if err := cfg.Parent.Validate(); err != nil {
 		return fmt.Errorf("invalid parent config: %w", err)
 	}
+	if err := cfg.Stats.Validate(); err != nil {
+		return fmt.Errorf("invalid stats config: %w", err)
+	}
+	if err := cfg.Snapshots.Validate(); err != nil {
+		return fmt.Errorf("invalid snapshots config: %w", err)
+	}
+	if err := cfg.List.Validate(); err != nil {
+		return fmt.Errorf("invalid list config: %w", err)
+	}
+	return nil
+}
+
+// BuildFlags implements the ConfigSection interface.
+// AppConfig itself does not contribute restic CLI flags directly,
+// but delegates that responsibility to its sub-configurations.
+func (cfg *AppConfig) BuildFlags() []string {
 	return nil
 }
 

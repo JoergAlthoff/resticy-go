@@ -63,4 +63,92 @@ func (c *ForgetConfig) Validate() error {
 	return nil
 }
 
+func (forgetConfig *ForgetConfig) BuildFlags() []string {
+	var flags []string
+	flags = append(flags, forgetConfig.snapshotRetentionFlags()...)
+	flags = append(flags, forgetConfig.timeBasedRetentionFlags()...)
+	flags = append(flags, forgetConfig.cleanupBehaviorFlags()...)
+	return flags
+}
+
+func (forgetConfig *ForgetConfig) snapshotRetentionFlags() []string {
+	var flags []string
+
+	if forgetConfig.KeepLast > 0 {
+		flags = append(flags, fmt.Sprintf("--keep-last=%d", forgetConfig.KeepLast))
+	}
+	if forgetConfig.KeepHourly > 0 {
+		flags = append(flags, fmt.Sprintf("--keep-hourly=%d", forgetConfig.KeepHourly))
+	}
+	if forgetConfig.KeepDaily > 0 {
+		flags = append(flags, fmt.Sprintf("--keep-daily=%d", forgetConfig.KeepDaily))
+	}
+	if forgetConfig.KeepWeekly > 0 {
+		flags = append(flags, fmt.Sprintf("--keep-weekly=%d", forgetConfig.KeepWeekly))
+	}
+	if forgetConfig.KeepMonthly > 0 {
+		flags = append(flags, fmt.Sprintf("--keep-monthly=%d", forgetConfig.KeepMonthly))
+	}
+	if forgetConfig.KeepYearly > 0 {
+		flags = append(flags, fmt.Sprintf("--keep-yearly=%d", forgetConfig.KeepYearly))
+	}
+
+	return flags
+}
+
+func (forgetConfig *ForgetConfig) timeBasedRetentionFlags() []string {
+	var flags []string
+
+	if forgetConfig.KeepWithin != "" {
+		flags = append(flags, "--keep-within="+forgetConfig.KeepWithin)
+	}
+	if forgetConfig.KeepWithinHourly != "" {
+		flags = append(flags, "--keep-within-hourly="+forgetConfig.KeepWithinHourly)
+	}
+	if forgetConfig.KeepWithinDaily != "" {
+		flags = append(flags, "--keep-within-daily="+forgetConfig.KeepWithinDaily)
+	}
+	if forgetConfig.KeepWithinWeekly != "" {
+		flags = append(flags, "--keep-within-weekly="+forgetConfig.KeepWithinWeekly)
+	}
+	if forgetConfig.KeepWithinMonthly != "" {
+		flags = append(flags, "--keep-within-monthly="+forgetConfig.KeepWithinMonthly)
+	}
+	if forgetConfig.KeepWithinYearly != "" {
+		flags = append(flags, "--keep-within-yearly="+forgetConfig.KeepWithinYearly)
+	}
+
+	return flags
+}
+
+func (forgetConfig *ForgetConfig) cleanupBehaviorFlags() []string {
+	var flags []string
+
+	if forgetConfig.Prune {
+		flags = append(flags, "--prune")
+	}
+	
+	if forgetConfig.DryRun {
+		flags = append(flags, "--dry-run")
+	}
+
+	if forgetConfig.GroupBy != "" {
+		flags = append(flags, "--group-by="+forgetConfig.GroupBy)
+	}
+
+	for _, host := range forgetConfig.Host {
+		flags = append(flags, "--host="+host)
+	}
+
+	for _, tag := range forgetConfig.Tag {
+		flags = append(flags, "--tag="+tag)
+	}
+
+	for _, path := range forgetConfig.Path {
+		flags = append(flags, "--path="+path)
+	}
+
+	return flags
+}
+
 var _ ConfigSection = (*ForgetConfig)(nil)

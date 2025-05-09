@@ -3,45 +3,48 @@ package subcmds
 import (
 	"fmt"
 	"os"
-	"resticy-go/internal/config"
+	"github.com/JoergAlthoff/resticy-go/internal/config"
+	"github.com/JoergAlthoff/resticy-go/internal/logging"
 )
 
-type Backup struct {
-	cfg     *config.AppConfig
+type BackupCommand struct {
+	appConfig     *config.AppConfig
 	args    []string
 	sources []string
 }
 
-func NewBackup(cfg *config.AppConfig, sources []string) *Backup {
-	return &Backup{cfg: cfg, sources: sources}
+func NewBackup(appConfig *config.AppConfig, sources []string) *BackupCommand {
+	return &BackupCommand{appConfig: appConfig, sources: sources}
 }
 
-func (b *Backup) buildArgs() {
-	b.args = []string{"backup"}
-
-	b.args = append(b.args, b.sources...)
-
-	if b.cfg.Parent.Repository != "" {
-		b.args = append(b.args, "--repo", b.cfg.Parent.Repository)
+func (command *BackupCommand) buildArgs() {
+	if command.appConfig.Debug {
+		fmt.Printf("cfg.Parent content: %+v\n", command.appConfig.Parent)
 	}
 
-	if b.cfg.Parent.PasswordFile != "" {
-		b.args = append(b.args, "--password-file", b.cfg.Parent.PasswordFile)
-	}
+	command.args = append([]string{"backup"}, command.appConfig.Parent.BuildFlags()...)
+	command.args = append(command.args, command.sources...)
+	command.args = append(command.args, command.appConfig.Backup.BuildFlags()...)
 
-	b.args = append(b.args, b.cfg.Backup.BuildFlags()...)
-
-	if b.cfg.Debug {
-		fmt.Printf("Built arguments: %v\n", b.args)
+	if command.appConfig.Debug {
+		fmt.Printf("Built arguments: %v\n", command.args)
 	}
 }
 
-func (b *Backup) Execute() error {
-	if len(b.sources) == 0 {
+func (command *BackupCommand) Execute() error {
+	if len(command.sources) == 0 {
 		fmt.Fprintln(os.Stderr, "Error: No backup source path provided.")
 		os.Exit(1)
 	}
 
-	b.buildArgs()
-	return runRestic(b.args, b.cfg.Parent.Verbose)
+	command.buildArgs()
+	output, err := runRestic(command.args, command.appConfig.Debug)
+	if err != nil {
+		return err
+	}
+	return logging.LogCommandOutput(command.appConfig.ForgetLog, output)
 }
+
+
+// Interface check
+var _ SubCommand = (*BackupCommand)(nil)
