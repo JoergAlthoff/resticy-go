@@ -1,4 +1,4 @@
-module resticy-go
+module github.com/JoergAlthoff/resticy-go
 
 go 1.22.2
 
