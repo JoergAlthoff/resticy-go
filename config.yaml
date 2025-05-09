@@ -1,11 +1,15 @@
-backup_log: /var/log/restic_full.log
-forget_log: /var/log/restic_forget.log
-snapshots_log: /var/log/restic_snapshots.log
-status_log: /var/log/restic_status.log
+# This file contains all default values supported by restic.
+# You can omit any sections or values that are not relevant for your intended subcommand.
+# Missing fields will be filled with defaults and validated automatically at runtime.
 
+backup_log: /var/log/restic_full.log  # Log file for backup command
+forget_log: /var/log/restic_forget.log  # Log file for forget command
+snapshots_log: /var/log/restic_snapshots.log  # Log file for snapshots command
+status_log: /var/log/restic_status.log  # Log file for status summary
+stats_log: /var/log/restic_stats.log  # Log file for stats command
 
 parent:
-  # Zugang zum Repository
+  # Repository access credentials and location
   repository: /mnt/restic/restic-beelink1
   repository_file: ""
   password_file: /etc/restic/.restic_password
@@ -27,12 +31,11 @@ parent:
   compression: auto
   option: []
 
-  # Sicherheit & Verhalten
+  # Security and behavior settings
   insecure_tls: false
   quiet: false
   json: false
   verbose: 0
-
 
 snapshots:
   # Filter options
@@ -44,7 +47,6 @@ snapshots:
   compact: false
   group-by: ""
   latest: 0
-
 
 forget:
   # Snapshot retention policies
@@ -65,7 +67,11 @@ forget:
 
   # Cleanup behavior
   prune: true
-
+  dry-run: false
+  group-by: ""
+  host: []
+  tag: []
+  path: []
 
 backup:
   # Data sources (what to back up)
@@ -116,7 +122,7 @@ backup:
   group-by: ""
   parent: ""
   time: ""
-  help: false
+  help: true
 
 prune:
   max_unused: "5%"
@@ -126,27 +132,31 @@ prune:
   repack_uncompressed: false
   dry_run: false
 
-
 check:
   read_data: false
   check_unused: false
   with_cache: true
-  
 
 diff:
-  # Placeholder for restic diff options
-  # Not yet implemented in resticy-go
-
-  from: ""     # first snapshot ID
-  to: ""       # second snapshot ID
+  # Configuration options for the 'restic diff' command.
+  # This command compares two snapshots to show file-level differences.
+  from: "" # first snapshot ID
+  to: "" # second snapshot ID
   metadata: false
   help: false
 
-# Placeholder section for future restic init support
-init:
-  # Placeholder for restic init options
-  # Not yet implemented in resticy-go
+stats:
+  # Statistics reporting configuration
+  # Controls how restic computes and presents repository data summaries
+  mode: restore-size
+  host: []
+  path: []
+  tag: []
+  snapshot_ids: [] # optional
 
+init:
+  # Configuration options for the 'restic init' command.
+  # Used to initialize a new repository or copy parameters from another.
   copy_chunker_params: false
   from_repo: ""
   from_repository_file: ""
