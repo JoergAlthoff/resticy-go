@@ -2,11 +2,11 @@
 # You can omit any sections or values that are not relevant for your intended subcommand.
 # Missing fields will be filled with defaults and validated automatically at runtime.
 
-backup_log: /var/log/restic_full.log  # Log file for backup command
-forget_log: /var/log/restic_forget.log  # Log file for forget command
-snapshots_log: /var/log/restic_snapshots.log  # Log file for snapshots command
-status_log: /var/log/restic_status.log  # Log file for status summary
-stats_log: /var/log/restic_stats.log  # Log file for stats command
+backup_log: /var/log/restic_full.log # Log file for backup command
+forget_log: /var/log/restic_forget.log # Log file for forget command
+snapshots_log: /var/log/restic_snapshots.log # Log file for snapshots command
+status_log: /var/log/restic_status.log # Log file for status summary
+stats_log: /var/log/restic_stats.log # Log file for stats command
 
 parent:
   # Repository access credentials and location

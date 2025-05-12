@@ -66,13 +66,33 @@ func init() {
 		},
 	})
 
-	rootCmd.AddCommand(&cobra.Command{
-		Use:   "stats",
-		Short: "Show repository statistics",
+	var outputFile string
+
+	setenvCmd := &cobra.Command{
+		Use:   "setenv",
+		Short: "Print environment variable exports for restic",
+		Long: `Generates and executes a shell script that exports environment variables
+required by restic based on the loaded configuration.
+
+Options:
+  --output=FILE  Name of the shell script to generate (default: set_restic_env.sh)
+  --debug        Print the generated script to stdout before execution
+
+Note:
+  Only values explicitly set in the configuration are exported.
+  Existing environment variables remain unchanged unless overwritten by the config.
+`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return subcmds.NewStatsCommand(cfg).Execute()
+			setenvCfg := &config.SetenvConfig{
+				OutputFile: outputFile,
+				Debug:      debug,
+			}
+			return subcmds.NewSetenvCommand(cfg, setenvCfg).Execute()
 		},
-	})
+	}
+
+	setenvCmd.Flags().StringVar(&outputFile, "output", "set_restic_env.sh", "Name of the shell script to generate")
+	rootCmd.AddCommand(setenvCmd)
 
 	rootCmd.AddCommand(&cobra.Command{
 		Use:   "snapshots",
