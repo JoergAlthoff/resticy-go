@@ -118,6 +118,7 @@ func (command *StatusCommand) Execute() error {
 		return err
 	}
 	command.printSummary(snapshotOutput, statsOutput)
+	fmt.Println("\n✔ Status completed successfully.")
 	return nil
 }
 

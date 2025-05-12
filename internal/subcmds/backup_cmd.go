@@ -3,8 +3,9 @@ package subcmds
 import (
 	"fmt"
 	"os"
+	"time"
+
 	"github.com/JoergAlthoff/resticy-go/internal/config"
-	"github.com/JoergAlthoff/resticy-go/internal/logging"
 )
 
 type BackupCommand struct {
@@ -42,7 +43,20 @@ func (command *BackupCommand) Execute() error {
 	if err != nil {
 		return err
 	}
-	return logging.LogCommandOutput(command.appConfig.ForgetLog, output)
+	timestamp := time.Now().Format("2006-01-02 15:04:05")
+	output = fmt.Sprintf("[%s] restic backup started\n%s", timestamp, output)
+	logFile := command.appConfig.BackupLog
+	file, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to open log file %s: %w", logFile, err)
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(output + "\n")
+	if err != nil {
+		return fmt.Errorf("failed to write to log file %s: %w", logFile, err)
+	}
+	return nil
 }
 
 
