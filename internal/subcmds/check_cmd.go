@@ -16,12 +16,19 @@ func NewCheck(appConfig *config.AppConfig) *CheckCommand {
 }
 
 func (command *CheckCommand) Execute() error {
+	fmt.Println("🔍 Starting check operation...")
 	command.buildArgs()
 	output, err := runRestic(command.args, command.appConfig.Debug)
 	if err != nil {
 		return err
 	}
-	return logging.LogCommandOutput(command.appConfig.ForgetLog, output)
+	fmt.Println("✅ Check completed. Logging output...")
+	err = logging.LogCommandOutput(command.appConfig.InfoLog, "check", output)
+	if err != nil {
+		return err
+	}
+	fmt.Println("📝 Check result logged to:", command.appConfig.ForgetLog)
+	return nil
 }
 
 func (command *CheckCommand) buildArgs() {

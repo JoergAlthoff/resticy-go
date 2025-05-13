@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/JoergAlthoff/resticy-go/internal/config"
+	"github.com/JoergAlthoff/resticy-go/internal/logging"
 )
 
 // StatsCommand represents the 'stats' subcommand
@@ -20,12 +21,18 @@ func NewStatsCommand(appConfig *config.AppConfig) *StatsCommand {
 }
 
 func (command *StatsCommand) Execute() error {
+	fmt.Println("📊 Starting stats operation...")
 	command.buildArgs()
 	output, err := runRestic(command.args, command.appConfig.Debug)
 	if err != nil {
 		return err
 	}
-	fmt.Println(output)
+	fmt.Println("✅ Stats completed. Logging output...")
+	err = logging.LogCommandOutput(command.appConfig.InfoLog, "stats", output)
+	if err != nil {
+		return err
+	}
+	fmt.Println("📝 Stats result logged to:", command.appConfig.InfoLog)
 	return nil
 }
 

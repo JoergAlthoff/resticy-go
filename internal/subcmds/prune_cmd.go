@@ -23,7 +23,7 @@ func (command *PruneCommand) Execute() error {
         return err
     }
     fmt.Println("✅ Prune completed. Logging output...")
-    err = logging.LogCommandOutput(command.appConfig.PruneLog, output)
+    err = logging.LogCommandOutput(command.appConfig.PruneLog, "prune", output)
     if err != nil {
         return err
     }

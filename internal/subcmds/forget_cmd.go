@@ -38,7 +38,7 @@ func (command *ForgetCommand) Execute() error {
 	if err != nil {
 		return err
 	}
-	return logging.LogCommandOutput(command.appConfig.ForgetLog, output)
+	return logging.LogCommandOutput(command.appConfig.ForgetLog, "forget", output)
 }
 
 // Interface check
