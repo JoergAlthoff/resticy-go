@@ -20,15 +20,15 @@
 
 1. Build the binary:
 
-```bash
-go build -o resticy ./cmd/resticy
-```
+    ```bash
+    go build -o resticy ./cmd/resticy
+    ```
 
 2. Run a command:
 
-```bash
-./resticy snapshots --config=config.yaml
-```
+    ```bash
+    ./resticy snapshots --config=config.yaml
+    ```
 
 ## Example Configuration
 
