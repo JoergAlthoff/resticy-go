@@ -37,12 +37,15 @@ func (command *BackupCommand) Execute() error {
 		fmt.Fprintln(os.Stderr, "Error: No backup source path provided.")
 		os.Exit(1)
 	}
+	fmt.Println("🗄️ Starting backup operation...")
 
 	command.buildArgs()
 	output, err := runRestic(command.args, command.appConfig.Debug)
 	if err != nil {
 		return err
 	}
+	fmt.Println("✅ Backup completed. Logging output...")
+
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	output = fmt.Sprintf("[%s] restic backup started\n%s", timestamp, output)
 	logFile := command.appConfig.BackupLog
@@ -56,6 +59,7 @@ func (command *BackupCommand) Execute() error {
 	if err != nil {
 		return fmt.Errorf("failed to write to log file %s: %w", logFile, err)
 	}
+	fmt.Println("📝 Backup result logged to:", logFile)
 	return nil
 }
 
