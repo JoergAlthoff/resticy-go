@@ -18,10 +18,9 @@ type AppConfig struct {
 	Prune        PruneConfig     `yaml:"prune,omitempty"`
 	BackupLog    string          `yaml:"backup_log"`
 	ForgetLog    string          `yaml:"forget_log,omitempty"`
-	SnapshotsLog string          `yaml:"snapshots_log,omitempty"`
 	StatusLog    string          `yaml:"status_log,omitempty"`
-	StatsLog     string          `yaml:"stats_log,omitempty"`
 	PruneLog     string          `yaml:"prune_log,omitempty"`
+	InfoLog      string          `yaml:"info_log,omitempty"`
 	Debug        bool            `yaml:"debug,omitempty"`
 }
 
@@ -53,17 +52,14 @@ func (cfg *AppConfig) ApplyDefaults() {
 	if cfg.ForgetLog == "" {
 		cfg.ForgetLog = "/var/log/restic_forget.log"
 	}
-	if cfg.SnapshotsLog == "" {
-		cfg.SnapshotsLog = "/var/log/restic_snapshots.log"
-	}
 	if cfg.StatusLog == "" {
 		cfg.StatusLog = "/var/log/restic_status.log"
 	}
-	if cfg.StatsLog == "" {
-		cfg.StatsLog = "/var/log/restic_stats.log"
-	}
 	if cfg.PruneLog == "" {
 		cfg.PruneLog = "/var/log/restic_prune.log"
+	}
+	if cfg.InfoLog == "" {
+		cfg.InfoLog = "/var/log/restic_info.log"
 	}
 
 	if err := cfg.Parent.Validate(); err != nil {
