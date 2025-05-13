@@ -15,11 +15,13 @@ type AppConfig struct {
 	Stats        StatsConfig     `yaml:"stats,omitempty"`
 	Snapshots    SnapshotsConfig `yaml:"snapshots,omitempty"`
 	List         ListConfig      `yaml:"list,omitempty"`
+	Prune        PruneConfig     `yaml:"prune,omitempty"`
 	BackupLog    string          `yaml:"backup_log"`
 	ForgetLog    string          `yaml:"forget_log,omitempty"`
 	SnapshotsLog string          `yaml:"snapshots_log,omitempty"`
 	StatusLog    string          `yaml:"status_log,omitempty"`
 	StatsLog     string          `yaml:"stats_log,omitempty"`
+	PruneLog     string          `yaml:"prune_log,omitempty"`
 	Debug        bool            `yaml:"debug,omitempty"`
 }
 
@@ -43,6 +45,7 @@ func (cfg *AppConfig) ApplyDefaults() {
 	cfg.Backup.ApplyDefaults()
 	cfg.Forget.ApplyDefaults()
 	cfg.Check.ApplyDefaults()
+	cfg.Prune.ApplyDefaults()
 
 	if cfg.BackupLog == "" {
 		cfg.BackupLog = "/var/log/restic_backup.log"
@@ -58,6 +61,9 @@ func (cfg *AppConfig) ApplyDefaults() {
 	}
 	if cfg.StatsLog == "" {
 		cfg.StatsLog = "/var/log/restic_stats.log"
+	}
+	if cfg.PruneLog == "" {
+		cfg.PruneLog = "/var/log/restic_prune.log"
 	}
 
 	if err := cfg.Parent.Validate(); err != nil {
@@ -87,6 +93,9 @@ func (cfg *AppConfig) Validate() error {
 	}
 	if err := cfg.List.Validate(); err != nil {
 		return fmt.Errorf("invalid list config: %w", err)
+	}
+	if err := cfg.Prune.Validate(); err != nil {
+		return fmt.Errorf("invalid prune config: %w", err)
 	}
 	return nil
 }

@@ -25,6 +25,7 @@ var rootCmd = &cobra.Command{
 			return fmt.Errorf("failed to load config: %w", err)
 		}
 		cfg.Debug = debug
+		cfg.ApplyDefaults()
 		return nil
 	},
 }
@@ -99,6 +100,14 @@ Note:
 		Short: "List snapshots in the repository",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return subcmds.NewSnapshotsCommand(cfg).Execute()
+		},
+	})
+
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "prune",
+		Short: "Run restic prune",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return subcmds.NewPrune(cfg).Execute()
 		},
 	})
 }
