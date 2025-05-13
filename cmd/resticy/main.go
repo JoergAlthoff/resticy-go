@@ -110,6 +110,14 @@ Note:
 			return subcmds.NewPrune(cfg).Execute()
 		},
 	})
+
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "stats",
+		Short: "Show restic repository statistics",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return subcmds.NewStatsCommand(cfg).Execute()
+		},
+	})
 }
 
 func main() {
