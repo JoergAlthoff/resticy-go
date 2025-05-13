@@ -82,3 +82,7 @@ Temporary Items
 # Excludes the project binary
 resticy
 *.man
+
+# ---> SonarLint
+!.sonarlint/connectedMode.json
+.sonarlint/*

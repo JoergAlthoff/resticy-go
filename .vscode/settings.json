@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "joergalthoff",
+        "projectKey": "JoergAlthoff_resticy-go"
+    }
+}
