@@ -10,9 +10,9 @@ stats_log: /var/log/restic_stats.log # Log file for stats command
 
 parent:
   # Repository access credentials and location
-  repository: /mnt/restic/restic-beelink1
+  repository: /mnt/restic/restic-beelink1       # adjust to your environment
   repository_file: ""
-  password_file: /etc/restic/.restic_password
+  password_file: /etc/restic/.restic_password   # adjust to your environment
   password_command: ""
   key_hint: ""
   tls_client_cert: ""
