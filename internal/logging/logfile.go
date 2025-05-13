@@ -7,7 +7,7 @@ import (
 )
 
 // LogCommandOutput appends the command output to a log file with a timestamp
-func LogCommandOutput(logPath string, output string) error {
+func LogCommandOutput(logPath string, commandName string, output string) error {
     if logPath == "" {
         return nil
     }
@@ -19,7 +19,7 @@ func LogCommandOutput(logPath string, output string) error {
     defer file.Close()
 
     timestamp := time.Now().Format("2006-01-02 15:04:05")
-    header := fmt.Sprintf("\n[%s] restic output:\n", timestamp)
+    header := fmt.Sprintf("\n[%s] restic %s output:\n", timestamp, commandName)
 
     _, err = file.Write([]byte(header))
     if err != nil {

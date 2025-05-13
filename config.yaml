@@ -4,15 +4,15 @@
 
 backup_log: /var/log/restic_full.log # Log file for backup command
 forget_log: /var/log/restic_forget.log # Log file for forget command
-snapshots_log: /var/log/restic_snapshots.log # Log file for snapshots command
+prune_log: /var/log/restic_prune.log # Log file for prune command
 status_log: /var/log/restic_status.log # Log file for status summary
-stats_log: /var/log/restic_stats.log # Log file for stats command
+info_log: /var/log/restic_info.log # Log file for all other commands
 
 parent:
   # Repository access credentials and location
-  repository: /mnt/restic/restic-beelink1       # adjust to your environment
+  repository: /mnt/restic/restic-beelink1 # adjust to your environment
   repository_file: ""
-  password_file: /etc/restic/.restic_password   # adjust to your environment
+  password_file: /etc/restic/.restic_password # adjust to your environment
   password_command: ""
   key_hint: ""
   tls_client_cert: ""
@@ -126,7 +126,7 @@ backup:
 
 prune:
   max_unused: "5%"
-  max_repack_size: ""
+  max_repack_size: "500M"
   repack_cacheable_only: false
   repack_small: false
   repack_uncompressed: false
